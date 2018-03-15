@@ -25,17 +25,6 @@ describe('when using new CopyPckJsonPlugin({option}) -> your build/package.json 
   })
 
   describe('throw error when package.json not found', () => {
-    it('should throw an error when package.json is not found', () => {
-      let err
-      try {
-        run({}, 'src/test')
-      } catch (e) {
-        err = e
-      }
-      expect(err instanceof Error).toBe(true)
-      expect(err.message.slice(err.message.indexOf(':') + 1, err.message.indexOf('\n'))).toEqual(mock.errorPath)
-    })
-
     it('allow passing  paths directly to the context options', done => {
       run({}, 'test/test-app')
         .then(() => {
