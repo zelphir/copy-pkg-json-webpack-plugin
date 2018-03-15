@@ -25,7 +25,7 @@ class CopyPkgJsonPlugin {
       throw new Error(this.notFoundError(root))
     }
 
-    compiler.plugin('emit', (compilation, callback) => {
+    const emit = (compilation, callback) => {
       if (options.hasOwnProperty('remove')) {
         options.remove.forEach(val => {
           if (/\./.test(val)) {
@@ -57,7 +57,15 @@ class CopyPkgJsonPlugin {
       }
 
       callback()
-    })
+    }
+
+    if (compiler.hooks) {
+      const plugin = { name: 'CopyPkgJsonPlugin' }
+
+      compiler.hooks.emit.tapAsync(plugin, emit)
+    } else {
+      compiler.plugin('emit', emit)
+    }
   }
 
   notFoundError(root) {
