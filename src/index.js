@@ -25,7 +25,10 @@ class CopyPkgJsonPlugin {
       throw new Error(this.notFoundError(root))
     }
 
-    compiler.plugin('emit', (compilation, callback) => {
+    (compiler.hooks
+      ? compiler.hooks.emit.tapAsync.bind(compiler.hooks.emit, 'CopyPkgJsonWebpackPlugin')
+      : compiler.plugin.bind(compiler, 'emit'))
+    ((compilation, callback) => {
       if (options.hasOwnProperty('remove')) {
         options.remove.forEach(val => {
           if (/\./.test(val)) {
